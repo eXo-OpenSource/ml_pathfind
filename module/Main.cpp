@@ -26,6 +26,9 @@ MTAEXPORT void RegisterFunctions(lua_State* luaVM)
 {
     if (pModuleManager && luaVM)
     {
+		// Add lua vm to states list (to check validility)
+		CFunctions::_luaStates.insert(luaVM);
+
         pModuleManager->RegisterFunction(luaVM, "findShortestPathBetween", &CFunctions::FindShortestPathBetween);
     }
 }
@@ -45,6 +48,9 @@ MTAEXPORT bool ShutdownModule()
 
 MTAEXPORT bool ResourceStopping(lua_State* luaVM)
 {
+	// Invalidate lua vm by removing it from the valid list
+	CFunctions::_luaStates.erase(luaVM);
+
     return true;
 }
 

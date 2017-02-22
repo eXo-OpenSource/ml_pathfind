@@ -2,11 +2,14 @@
 #include "extra/CLuaArguments.h"
 #include <pathfind/Graph.h>
 
+std::unordered_set<lua_State*> CFunctions::_luaStates;
+
 int CFunctions::FindShortestPathBetween(lua_State* luaVM)
 {
 	// findShortestPathBetween(float startX, float startY, float startZ, float endX, float endY, float endZ, function callback)
 	if (lua_type(luaVM, 1) != LUA_TNUMBER || lua_type(luaVM, 2) != LUA_TNUMBER || lua_type(luaVM, 3) != LUA_TNUMBER ||
-		lua_type(luaVM, 4) != LUA_TNUMBER || lua_type(luaVM, 5) != LUA_TNUMBER || lua_type(luaVM, 6) != LUA_TNUMBER)
+		lua_type(luaVM, 4) != LUA_TNUMBER || lua_type(luaVM, 5) != LUA_TNUMBER || lua_type(luaVM, 6) != LUA_TNUMBER ||
+		lua_type(luaVM, 7) != LUA_TFUNCTION)
 	{
 		pModuleManager->ErrorPrintf("Bad argument @ findShortestPathBetween");
 		lua_pushboolean(luaVM, false);
@@ -17,8 +20,10 @@ int CFunctions::FindShortestPathBetween(lua_State* luaVM)
 	Vector3 from((float)lua_tonumber(luaVM, 1), (float)lua_tonumber(luaVM, 2), (float)lua_tonumber(luaVM, 3));
 	Vector3 to((float)lua_tonumber(luaVM, 4), (float)lua_tonumber(luaVM, 5), (float)lua_tonumber(luaVM, 6));
 
-	// Read Lua callback function from stack
-	// TODO
+	// Save reference of the Lua callback function
+	// See: http://lua-users.org/lists/lua-l/2008-12/msg00193.html
+	lua_pushvalue(luaVM, 7);
+	int funcRef = luaL_ref(luaVM, LUA_REGISTRYINDEX);
 
 	jobManager.PushTask([from, to]() {
 
@@ -28,10 +33,11 @@ int CFunctions::FindShortestPathBetween(lua_State* luaVM)
 		// Run A*
 		return algorithm.CalculateShortestPath();
 
-	}, [luaVM](const pathfind::AStarResult& result) {
+	}, [luaVM, funcRef](const pathfind::AStarResult& result) {
 
 		// Validate LuaVM (use ResourceStart/-Stop to manage valid lua states)
-		// TODO
+		if (_luaStates.find(luaVM) == _luaStates.end())
+			return;
 
 		// Push to Lua stack
 		lua_newtable(luaVM);
@@ -61,7 +67,9 @@ int CFunctions::FindShortestPathBetween(lua_State* luaVM)
 			lua_settable(luaVM, -3);
 		}
 
-		lua_call(luaVM, 2, 0);
+		// Get stored reference and call callback function
+		lua_rawgeti(luaVM, funcRef, 0);
+		lua_call(luaVM, 1, 0);
 
 	});
 
