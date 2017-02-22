@@ -1,0 +1,22 @@
+stages:
+  - setup_env
+  - build
+  - deploy
+
+setup_env_job:
+  stage: setup_env
+  script:
+    - sudo apt-get update -qq
+    - sudo apt-get install -y -qq gcc g++ build-essential
+
+build_job:
+  stage: build
+  script:
+    - ./premake5_x64 gmake
+    - cd Build
+    - make config=release_x64 all
+
+deploy_job:
+  stage: deploy
+  script:
+    - echo "TODO"
