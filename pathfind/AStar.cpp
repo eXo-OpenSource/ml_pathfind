@@ -14,7 +14,7 @@ AStar::AStar(Graph* graph, const Vector3& from, const Vector3& to)
 {
 }
 
-std::vector<GraphNode*> AStar::CalculateShortestPath()
+AStarResult AStar::CalculateShortestPath()
 {
 	// Add the node we start from to the to-traverse list
 	_openSet.insert(_from);

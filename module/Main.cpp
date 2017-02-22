@@ -1,16 +1,10 @@
-/*********************************************************
-*
-*  PROJECT:      vRoleplay
-*  FILE:         Main.cpp
-*  PURPOSE:      Entry point file
-*
-*********************************************************/
 #include "Common.h"
-#include "WayFinderJobManager.h"
 #include "CFunctions.h"
 #include "include/ILuaModuleManager.h"
+#include "JobManager.h"
 
 ILuaModuleManager10* pModuleManager = nullptr;
+JobManager<pathfind::AStarResult, 2> jobManager;
 
 // Initialisation function (module entrypoint)
 MTAEXPORT bool InitModule(ILuaModuleManager10* pManager, char* szModuleName, char* szAuthor, float* fVersion)
@@ -18,12 +12,12 @@ MTAEXPORT bool InitModule(ILuaModuleManager10* pManager, char* szModuleName, cha
     pModuleManager = pManager;
 
     // Set the module info
-    memcpy ( szModuleName, "Pathfind module", MAX_INFO_LENGTH );
-    memcpy ( szAuthor, "Jusonex", MAX_INFO_LENGTH );
+    memcpy(szModuleName, "Pathfind Mmodule", MAX_INFO_LENGTH);
+    memcpy(szAuthor, "Jusonex", MAX_INFO_LENGTH);
     *fVersion = 1.0f;
 
-    // Initialise way finder job manager
-    new WayFinderJobManager;
+	// Start job manager worker threads
+	jobManager.Start();
 
     return true;
 }
@@ -32,18 +26,20 @@ MTAEXPORT void RegisterFunctions(lua_State* luaVM)
 {
     if (pModuleManager && luaVM)
     {
-        pModuleManager->RegisterFunction(luaVM, "calculateRouteBetweenPoints", CFunctions::calculateRouteBetweenPoints);
+        pModuleManager->RegisterFunction(luaVM, "findShortestPathBetween", &CFunctions::FindShortestPathBetween);
     }
 }
 
 MTAEXPORT bool DoPulse()
 {
+	// Call complete callbacks on main thread
+	jobManager.SpreadResults();
+
     return true;
 }
 
-MTAEXPORT bool ShutdownModule(void)
+MTAEXPORT bool ShutdownModule()
 {
-    WayFinderJobManager::instance().stop();
     return true;
 }
 

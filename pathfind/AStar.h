@@ -9,13 +9,15 @@ namespace pathfind
 class Graph;
 struct GraphNode;
 
+using AStarResult = std::vector<GraphNode*>;
+
 class AStar
 {
 public:
 	AStar(Graph* graph, GraphNode* from, GraphNode* to);
 	AStar(Graph* graph, const Vector3& from, const Vector3& to);
 
-	std::vector<GraphNode*> CalculateShortestPath();
+	AStarResult CalculateShortestPath();
 
 protected:
 	float HeuristicCostEstimate(GraphNode* from, GraphNode* to);

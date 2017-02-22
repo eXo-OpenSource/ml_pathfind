@@ -6,6 +6,8 @@ project "module"
 	includedirs { "include" }
 	libdirs { "lib" }
 
+	links { "pathfind" }
+
 	vpaths {
 		["Headers/*"] = "**.h",
 		["Sources/*"] = "**.cpp",

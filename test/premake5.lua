@@ -7,11 +7,14 @@ project "test"
 	vpaths {
 		["Headers/*"] = "**.h",
 		["Sources/*"] = "**.cpp",
+		["Test files"] = "**.json",
 		["*"] = "premake5.lua"
 	}
 
 	files {
 		"premake5.lua",
 		"**.cpp",
-		"**.h"
+		"**.h",
+
+		"testnodes1.json"
 	}
