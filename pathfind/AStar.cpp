@@ -1,6 +1,7 @@
 #include "AStar.h"
 #include "Graph.h"
 #include <algorithm>
+#include <limits>
 
 namespace pathfind
 {

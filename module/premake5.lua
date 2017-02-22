@@ -25,3 +25,6 @@ project "module"
 		
 	filter { "system:windows", "platforms:x64" }
 		links { "lua5.1_64.lib" }
+
+	filter "system:not windows"
+		links { "lua5.1" }

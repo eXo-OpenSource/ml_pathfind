@@ -1,4 +1,5 @@
 #include "Graph.h"
+#include <limits>
 
 namespace pathfind
 {
