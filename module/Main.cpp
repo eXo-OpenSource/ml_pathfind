@@ -2,6 +2,7 @@
 #include "CFunctions.h"
 #include "include/ILuaModuleManager.h"
 #include "JobManager.h"
+#include <cstring>
 
 ILuaModuleManager10* pModuleManager = nullptr;
 JobManager<pathfind::AStarResult, 2> jobManager;
@@ -12,8 +13,8 @@ MTAEXPORT bool InitModule(ILuaModuleManager10* pManager, char* szModuleName, cha
     pModuleManager = pManager;
 
     // Set the module info
-    memcpy(szModuleName, "Pathfind Mmodule", MAX_INFO_LENGTH);
-    memcpy(szAuthor, "Jusonex", MAX_INFO_LENGTH);
+    std::memcpy(szModuleName, "Pathfind Mmodule", MAX_INFO_LENGTH);
+    std::memcpy(szAuthor, "Jusonex", MAX_INFO_LENGTH);
     *fVersion = 1.0f;
 
 	// Start job manager worker threads
