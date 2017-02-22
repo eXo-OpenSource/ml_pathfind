@@ -13,7 +13,7 @@ GraphReader::GraphReader(const std::string& path) : _path(path)
 std::unique_ptr<Graph> GraphReader::Read()
 {
 	// Load json file
-	nlohmann::json json = nlohmann::json(std::ifstream(_path));
+	nlohmann::json json = nlohmann::json::parse(std::ifstream(_path));
 
 	// Create graph from nodes
 	auto graph = std::make_unique<Graph>();
