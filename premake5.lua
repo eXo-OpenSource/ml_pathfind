@@ -2,6 +2,7 @@ solution "PathFind"
 	configurations { "Debug", "Release" }
 	location ( "Build" )
 	startproject "test"
+	targetdir "Bin/%{cfg.buildcfg}"
 
 	flags { "C++14" }
 	platforms { "x86", "x64" }
