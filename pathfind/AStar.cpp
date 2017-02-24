@@ -89,16 +89,19 @@ GraphNode* AStar::GetMinimumInOpenSet()
 
 std::vector<GraphNode*> AStar::ReconstructPath()
 {
-	std::vector<GraphNode*> path = { _from };
-	std::size_t index = _cameFrom.size();
-	path.resize(index);
+	std::vector<GraphNode*> path;
 
 	GraphNode* parent = _to;
 	while (parent != _from)
 	{
-		path[--index] = parent;
+		path.push_back(parent);
 		parent = _cameFrom[parent];
 	}
+
+	path.push_back(_from);
+
+	// Reverse path
+	std::reverse(path.begin(), path.end());
 
 	return std::move(path);
 }
