@@ -8,6 +8,7 @@ class CFunctions;
 extern ILuaModuleManager10* pModuleManager;
 
 extern JobManager<pathfind::AStarResult> jobManager;
+extern std::unique_ptr<pathfind::Graph> graph;
 
 class CFunctions
 {

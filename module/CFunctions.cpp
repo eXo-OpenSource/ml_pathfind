@@ -22,13 +22,13 @@ int CFunctions::FindShortestPathBetween(lua_State* luaVM)
 
 	// Save reference of the Lua callback function
 	// See: http://lua-users.org/lists/lua-l/2008-12/msg00193.html
-	lua_pushvalue(luaVM, 7);
+	lua_pushvalue(luaVM, -1);
 	int funcRef = luaL_ref(luaVM, LUA_REGISTRYINDEX);
 
 	jobManager.PushTask([from, to]() {
 
 		// Prepare information we need to pass to A*
-		pathfind::AStar algorithm(nullptr, from, to); // TODO: Insert graph
+		pathfind::AStar algorithm(graph.get(), from, to);
 		
 		// Run A*
 		return algorithm.CalculateShortestPath();
@@ -39,7 +39,10 @@ int CFunctions::FindShortestPathBetween(lua_State* luaVM)
 		if (_luaStates.find(luaVM) == _luaStates.end())
 			return;
 
-		// Push to Lua stack
+		// Push stored reference to callback function to the stack
+		lua_rawgeti(luaVM, LUA_REGISTRYINDEX, funcRef);
+
+		// Push arguments to the stack
 		lua_newtable(luaVM);
 		std::size_t index = 0;
 
@@ -67,9 +70,10 @@ int CFunctions::FindShortestPathBetween(lua_State* luaVM)
 			lua_settable(luaVM, -3);
 		}
 
-		// Get stored reference and call callback function
-		lua_rawgeti(luaVM, funcRef, 0);
-		lua_call(luaVM, 1, 0);
+		// Finally, call the function
+		int err = lua_pcall(luaVM, 1, 0, 0);
+		if (err != 0)
+			std::cout << lua_tostring(luaVM, 1);
 
 	});
 

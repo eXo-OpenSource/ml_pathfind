@@ -5,6 +5,7 @@
 #include <queue>
 #include <list>
 #include <mutex>
+#include <iostream>
 
 template<typename TaskResult>
 class JobManager
@@ -46,7 +47,8 @@ public:
 			}
 
 			// Get next task
-			std::pair<Task, TaskCompleteCallback>& task = _tasks.front();
+			std::pair<Task, TaskCompleteCallback> task = _tasks.front();
+			_tasks.pop();
 			_mutex.unlock();
 
 			// Run task
@@ -55,9 +57,6 @@ public:
 			// Put result into completed tasks list
 			std::lock_guard<std::mutex> lock{ _mutex };
 			_completedTasks.push_back({ result, task.second });
-
-			// Remove task
-			_tasks.pop();
 		}
 	}
 
@@ -65,10 +64,15 @@ public:
 	{
 		std::lock_guard<std::mutex> lock{ _mutex };
 
+		if (_completedTasks.empty())
+			return;
+
 		for (auto& task : _completedTasks)
 		{
 			task.second(task.first);
 		}
+
+		_completedTasks.clear();
 	}
 
 private:

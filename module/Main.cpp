@@ -3,9 +3,12 @@
 #include "include/ILuaModuleManager.h"
 #include "JobManager.h"
 #include <cstring>
+#include <pathfind/GraphReader.h>
+#include <pathfind/Graph.h>
 
 ILuaModuleManager10* pModuleManager = nullptr;
 JobManager<pathfind::AStarResult> jobManager(2);
+std::unique_ptr<pathfind::Graph> graph;
 
 // Initialisation function (module entrypoint)
 MTAEXPORT bool InitModule(ILuaModuleManager10* pManager, char* szModuleName, char* szAuthor, float* fVersion)
@@ -13,9 +16,13 @@ MTAEXPORT bool InitModule(ILuaModuleManager10* pManager, char* szModuleName, cha
     pModuleManager = pManager;
 
     // Set the module info
-    std::memcpy(szModuleName, "Pathfind Mmodule", MAX_INFO_LENGTH);
+    std::memcpy(szModuleName, "Pathfind Module", MAX_INFO_LENGTH);
     std::memcpy(szAuthor, "Jusonex", MAX_INFO_LENGTH);
     *fVersion = 1.0f;
+
+	// Load graph
+	pathfind::GraphReader graphReader("sa_nodes.json");
+	graph = graphReader.Read();
 
 	// Start job manager worker threads
 	jobManager.Start();
