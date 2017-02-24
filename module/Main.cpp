@@ -5,7 +5,7 @@
 #include <cstring>
 
 ILuaModuleManager10* pModuleManager = nullptr;
-JobManager<pathfind::AStarResult, 2> jobManager;
+JobManager<pathfind::AStarResult> jobManager(2);
 
 // Initialisation function (module entrypoint)
 MTAEXPORT bool InitModule(ILuaModuleManager10* pManager, char* szModuleName, char* szAuthor, float* fVersion)

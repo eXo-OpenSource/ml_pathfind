@@ -1,27 +1,27 @@
 #pragma once
 #include <thread>
-#include <array>
+#include <vector>
 #include <functional>
 #include <queue>
 #include <list>
 #include <mutex>
 
-template<typename TaskResult, std::size_t NumWorkers>
+template<typename TaskResult>
 class JobManager
 {
 public:
 	using Task = std::function<TaskResult()>;
 	using TaskCompleteCallback = std::function<void(const TaskResult& result)>;
 
-	JobManager()
+	JobManager(std::size_t numWorkers) : _numWorkers(numWorkers)
 	{
 	}
 
 	void Start()
 	{
-		for (int i = 0; i < NumWorkers; ++i)
+		for (std::size_t i = 0; i < _numWorkers; ++i)
 		{
-			_workers[i] = std::thread(&JobManager::RunWorker, this);
+			_workers.emplace_back(&JobManager::RunWorker, this);
 		}
 	}
 
@@ -72,7 +72,9 @@ public:
 	}
 
 private:
-	std::array<std::thread, NumWorkers> _workers;
+	std::vector<std::thread> _workers;
+	std::size_t _numWorkers;
+
 	std::queue<std::pair<Task, TaskCompleteCallback>> _tasks;
 	std::list<std::pair<TaskResult, TaskCompleteCallback>> _completedTasks;
 

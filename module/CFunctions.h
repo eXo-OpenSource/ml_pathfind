@@ -7,7 +7,7 @@
 class CFunctions;
 extern ILuaModuleManager10* pModuleManager;
 
-extern JobManager<pathfind::AStarResult, 2> jobManager;
+extern JobManager<pathfind::AStarResult> jobManager;
 
 class CFunctions
 {
