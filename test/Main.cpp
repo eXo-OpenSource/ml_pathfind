@@ -6,8 +6,10 @@
 int main(int argc, char* argv[])
 {
 	// Read graph from file
-	pathfind::GraphReader graphReader("../test/testnodes1.json");
+	pathfind::GraphReader graphReader("../test/sa_nodes.json");
+	std::cout << "Loading graph from json file" << std::endl;
 	std::unique_ptr<pathfind::Graph> graph = graphReader.Read();
+	std::cout << "Done loading!" << std::endl;
 
 	// Create instance of AStar
 	pathfind::AStar pathfind(graph.get(), Vector3(-2427.625, -2474.75, 35.75), Vector3(0.0f, 0.0f, 0.0f));

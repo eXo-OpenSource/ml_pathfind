@@ -17,14 +17,14 @@ std::unique_ptr<Graph> GraphReader::Read()
 
 	// Create graph from nodes
 	auto graph = std::make_unique<Graph>();
-	for (auto& node : json["nodes"])
+	for (auto& node : json)
 	{
 		graph->_nodes.push_back(GraphNode{ node["id"], Vector3(node["x"], node["y"], node["z"]), {} });
 	}
 
 	// Fill in edge pointers
 	std::size_t i = 0;
-	for (auto& node : json["nodes"])
+	for (auto& node : json)
 	{
 		auto& edges = graph->_nodes[i++].edges;
 
