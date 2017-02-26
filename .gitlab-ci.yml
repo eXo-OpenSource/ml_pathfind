@@ -14,8 +14,8 @@ build_job:
     - ./premake5_x64 gmake
     - cd Build
     - make config=release_x64 all
-    - mv Bin/Release/libml_gps.so ml_gps.so
-    - mv test/sa_nodes.json sa_nodes.json
+    - mv ../Bin/Release/libml_gps.so ml_gps.so
+    - mv ../test/sa_nodes.json sa_nodes.json
   artifacts:
     name: "$CI_BUILD_NAME"
     paths:
