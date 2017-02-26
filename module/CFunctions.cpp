@@ -74,7 +74,7 @@ int CFunctions::FindShortestPathBetween(lua_State* luaVM)
 		// Finally, call the function
 		int err = lua_pcall(luaVM, 1, 0, 0);
 		if (err != 0)
-			pModuleManager->ErrorPrintf(lua_tostring(luaVM, -1));
+			pModuleManager->ErrorPrintf("%s\n", lua_tostring(luaVM, -1));
 
 	});
 
