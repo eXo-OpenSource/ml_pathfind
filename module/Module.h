@@ -17,6 +17,8 @@ public:
 	void Start();
 	void Process();
 
+	void LoadGraph(const std::string& path);
+
 	inline void AddLuaVM(lua_State* luaVM) { _luaStates.insert(luaVM); }
 	inline void RemoveLuaVM(lua_State* luaVM) { _luaStates.erase(luaVM); }
 	inline bool HasLuaVM(lua_State* luaVM) { return _luaStates.find(luaVM) != _luaStates.end(); }

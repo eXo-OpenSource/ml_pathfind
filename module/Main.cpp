@@ -32,7 +32,8 @@ MTAEXPORT void RegisterFunctions(lua_State* luaVM)
 	g_Module->AddLuaVM(luaVM);
 
 	// Register functions
-    pModuleManager->RegisterFunction(luaVM, "findShortestPathBetween", &CFunctions::FindShortestPathBetween);
+	pModuleManager->RegisterFunction(luaVM, "loadPathGraph", &CFunctions::LoadPathGraph);
+	pModuleManager->RegisterFunction(luaVM, "findShortestPathBetween", &CFunctions::FindShortestPathBetween);
 }
 
 MTAEXPORT bool DoPulse()

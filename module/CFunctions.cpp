@@ -5,6 +5,45 @@
 #include <pathfind/Graph.h>
 #include "Module.h"
 
+int CFunctions::LoadPathGraph(lua_State* luaVM)
+{
+	if (lua_type(luaVM, 1) != LUA_TSTRING)
+	{
+		pModuleManager->ErrorPrintf("Bad argument @ loadPathGraph\n");
+		lua_pushboolean(luaVM, false);
+		return 1;
+	}
+
+	// Build graph path
+	std::string path{ "mods/deathmatch/resources/" };
+    char resourceName[100];
+	pModuleManager->GetResourceName(luaVM, resourceName, sizeof(resourceName));
+	path += std::string(resourceName) + "/" + lua_tostring(luaVM, 1);
+
+	// Check if path is valid
+	if (path.find("..") != std::string::npos)
+	{
+		pModuleManager->ErrorPrintf("Bad path @ loadPathGraph\n");
+		lua_pushboolean(luaVM, false);
+		return 1;
+	}
+
+	// Check if file exists
+	struct stat s;
+	if (stat(path.c_str(), &s) == 0)
+	{
+		pModuleManager->ErrorPrintf("File does not exist @ loadPathGraph\n");
+		lua_pushboolean(luaVM, false);
+		return 1;
+	}
+
+	// Load graph
+	g_Module->LoadGraph(path);
+
+	lua_pushboolean(luaVM, true);
+	return 1;
+}
+
 int CFunctions::FindShortestPathBetween(lua_State* luaVM)
 {
 	// findShortestPathBetween(float startX, float startY, float startZ, float endX, float endY, float endZ, function callback)
@@ -13,6 +52,14 @@ int CFunctions::FindShortestPathBetween(lua_State* luaVM)
 		lua_type(luaVM, 7) != LUA_TFUNCTION)
 	{
 		pModuleManager->ErrorPrintf("Bad argument @ findShortestPathBetween\n");
+		lua_pushboolean(luaVM, false);
+		return 1;
+	}
+
+	// Check if graph has been loaded
+	if (!g_Module->GetGraph())
+	{
+		pModuleManager->ErrorPrintf("No graph loaded @ findShortestPathBetween\n");
 		lua_pushboolean(luaVM, false);
 		return 1;
 	}
