@@ -5,7 +5,6 @@
 #include <queue>
 #include <list>
 #include <mutex>
-#include <iostream>
 
 template<typename TaskResult>
 class JobManager
@@ -20,9 +19,22 @@ public:
 
 	void Start()
 	{
+		_running = true;
+
 		for (std::size_t i = 0; i < _numWorkers; ++i)
 		{
 			_workers.emplace_back(&JobManager::RunWorker, this);
+		}
+	}
+
+	void Stop()
+	{
+		_running = false;
+
+		// Wait for threads to end
+		for (auto& worker : _workers)
+		{
+			worker.join();
 		}
 	}
 
@@ -35,7 +47,7 @@ public:
 
 	void RunWorker()
 	{
-		for (;;)
+		while (_running)
 		{
 			// Wait if there's no task for us
 			_mutex.lock();
@@ -78,6 +90,7 @@ public:
 private:
 	std::vector<std::thread> _workers;
 	std::size_t _numWorkers;
+	bool _running = false;
 
 	std::queue<std::pair<Task, TaskCompleteCallback>> _tasks;
 	std::list<std::pair<TaskResult, TaskCompleteCallback>> _completedTasks;

@@ -1,14 +1,10 @@
 #include "Common.h"
 #include "CFunctions.h"
 #include "include/ILuaModuleManager.h"
-#include "JobManager.h"
 #include <cstring>
-#include <pathfind/GraphReader.h>
-#include <pathfind/Graph.h>
+#include "Module.h"
 
 ILuaModuleManager10* pModuleManager = nullptr;
-JobManager<pathfind::AStarResult> jobManager(2);
-std::unique_ptr<pathfind::Graph> graph;
 
 // Initialisation function (module entrypoint)
 MTAEXPORT bool InitModule(ILuaModuleManager10* pManager, char* szModuleName, char* szAuthor, float* fVersion)
@@ -20,44 +16,44 @@ MTAEXPORT bool InitModule(ILuaModuleManager10* pManager, char* szModuleName, cha
     std::memcpy(szAuthor, "Jusonex", MAX_INFO_LENGTH);
     *fVersion = 1.0f;
 
-	// Load graph
-	pathfind::GraphReader graphReader("sa_nodes.json");
-	graph = graphReader.Read();
-
-	// Start job manager worker threads
-	jobManager.Start();
+	// Load module
+	g_Module = new Module;
+	g_Module->Start();
 
     return true;
 }
 
 MTAEXPORT void RegisterFunctions(lua_State* luaVM)
 {
-    if (pModuleManager && luaVM)
-    {
-		// Add lua vm to states list (to check validility)
-		CFunctions::_luaStates.insert(luaVM);
+	if (!pModuleManager || !luaVM)
+		return;
 
-        pModuleManager->RegisterFunction(luaVM, "findShortestPathBetween", &CFunctions::FindShortestPathBetween);
-    }
+	// Add lua vm to states list (to check validility)
+	g_Module->AddLuaVM(luaVM);
+
+	// Register functions
+    pModuleManager->RegisterFunction(luaVM, "findShortestPathBetween", &CFunctions::FindShortestPathBetween);
 }
 
 MTAEXPORT bool DoPulse()
 {
-	// Call complete callbacks on main thread
-	jobManager.SpreadResults();
+	g_Module->Process();
 
     return true;
 }
 
 MTAEXPORT bool ShutdownModule()
 {
+	// Unload module
+	delete g_Module;
+
     return true;
 }
 
 MTAEXPORT bool ResourceStopping(lua_State* luaVM)
 {
 	// Invalidate lua vm by removing it from the valid list
-	CFunctions::_luaStates.erase(luaVM);
+	g_Module->RemoveLuaVM(luaVM);
 
     return true;
 }
