@@ -17,7 +17,7 @@ MTAEXPORT bool InitModule(ILuaModuleManager10* pManager, char* szModuleName, cha
     *fVersion = 1.0f;
 
 	// Load module
-	g_Module = new Module;
+	g_Module = new Module(pManager);
 	g_Module->Start();
 
     return true;

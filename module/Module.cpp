@@ -4,19 +4,20 @@
 
 #include <pathfind/GraphReader.h>
 #include <pathfind/Graph.h>
+#include "include/ILuaModuleManager.h"
 
 Module* g_Module = nullptr;
 
 constexpr std::size_t kNumWorkers = 2;
 constexpr const char* kGraphPath = "sa_nodes.json";
 
-Module::Module() : _jobManager(kNumWorkers)
+Module::Module(ILuaModuleManager* manager) : _moduleManager(manager), _jobManager(kNumWorkers)
 {
 	// Load graph
 	auto startTime = std::chrono::system_clock::now();
 	pathfind::GraphReader graphReader(kGraphPath);
 	_graph = graphReader.Read();
-	std::cout << "Loaded graph! (Took " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - startTime).count() << "ms)" << std::endl;
+	_moduleManager->Printf("Loaded graph! (Took %dms)\n", std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - startTime).count());
 }
 
 Module::~Module()

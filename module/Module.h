@@ -6,11 +6,12 @@
 #include "JobManager.h"
 
 struct lua_State;
+class ILuaModuleManager;
 
 class Module
 {
 public:
-	Module();
+	Module(ILuaModuleManager* manager);
 	~Module();
 
 	void Start();
@@ -25,6 +26,8 @@ public:
 	inline pathfind::Graph* GetGraph() { return _graph.get(); }
 
 private:
+	ILuaModuleManager* _moduleManager;
+
 	JobManager<pathfind::AStarResult> _jobManager;
 
 	std::unique_ptr<pathfind::Graph> _graph;

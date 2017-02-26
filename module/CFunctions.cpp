@@ -12,7 +12,7 @@ int CFunctions::FindShortestPathBetween(lua_State* luaVM)
 		lua_type(luaVM, 4) != LUA_TNUMBER || lua_type(luaVM, 5) != LUA_TNUMBER || lua_type(luaVM, 6) != LUA_TNUMBER ||
 		lua_type(luaVM, 7) != LUA_TFUNCTION)
 	{
-		pModuleManager->ErrorPrintf("Bad argument @ findShortestPathBetween");
+		pModuleManager->ErrorPrintf("Bad argument @ findShortestPathBetween\n");
 		lua_pushboolean(luaVM, false);
 		return 1;
 	}
@@ -78,5 +78,6 @@ int CFunctions::FindShortestPathBetween(lua_State* luaVM)
 
 	});
 
-	return 0;
+	lua_pushboolean(luaVM, true);
+	return 1;
 }
