@@ -5,6 +5,10 @@
 #include <pathfind/Graph.h>
 #include "Module.h"
 
+#ifndef _WIN32
+    #include <sys/stat.h>
+#endif
+
 int CFunctions::LoadPathGraph(lua_State* luaVM)
 {
 	if (lua_type(luaVM, 1) != LUA_TSTRING)

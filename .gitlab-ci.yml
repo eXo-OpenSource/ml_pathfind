@@ -1,7 +1,6 @@
 stages:
   - setup_env
   - build
-  - deploy
 
 setup_env_job:
   stage: setup_env
@@ -20,8 +19,3 @@ build_job:
     paths:
       - Bin/Release/libml_gps.so
       - test/sa_nodes.json
-
-deploy_job:
-  stage: deploy
-  script:
-    - echo "TODO"
