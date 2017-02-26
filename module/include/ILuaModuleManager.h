@@ -58,6 +58,7 @@ public:
     virtual const char*         GetOperatingSystemName  ( ) = 0;
 
     virtual lua_State*          GetResourceFromName     ( const char* szResourceName ) = 0;
+    virtual bool                GetResourceName         ( lua_State* luaVM, char* szName, size_t length ) = 0;
 };
 
 #endif
