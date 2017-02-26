@@ -34,7 +34,7 @@ int CFunctions::LoadPathGraph(lua_State* luaVM)
 
 	// Check if file exists
 	struct stat s;
-	if (stat(path.c_str(), &s) == 0)
+	if (stat(path.c_str(), &s) != 0)
 	{
 		pModuleManager->ErrorPrintf("File does not exist @ loadPathGraph\n");
 		lua_pushboolean(luaVM, false);
