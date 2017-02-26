@@ -15,7 +15,9 @@ int main(int argc, char* argv[])
 	std::cout << "Done! (Took " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start).count() << "ms)" << std::endl;
 
 	// Create instance of AStar
+	start = std::chrono::system_clock::now();
 	pathfind::AStar pathfind(graph.get(), Vector3(-2427.625, -2474.75, 35.75), Vector3(0.0f, 0.0f, 0.0f));
+	std::cout << "Found a start node in " << std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now() - start).count() << "micro s" << std::endl;
 
 	// Run algorithm
 	start = std::chrono::system_clock::now();
