@@ -34,9 +34,8 @@ public:
 		// Wait for threads to end
 		for (auto& worker : _workers)
 		{
-            if (worker.joinable()) {
-                worker.join();
-            }
+			if (worker.joinable())
+				worker.join();
 		}
 	}
 
