@@ -19,24 +19,19 @@ int CFunctions::LoadPathGraph(lua_State* luaVM)
 	}
 
 	// Build graph path
-	std::string path{ "mods/deathmatch/resources/" };
-	char resourceName[100];
-	pModuleManager->GetResourceName(luaVM, resourceName, sizeof(resourceName));
-	path += std::string(resourceName) + "/" + lua_tostring(luaVM, 1);
-
-	// Check if path is valid
-	if (path.find("..") != std::string::npos)
+	char buf[300];
+	if (!pModuleManager->GetResourceFilePath(luaVM, lua_tostring(luaVM, 1), buf, sizeof(buf)))
 	{
-		pModuleManager->ErrorPrintf("Bad path @ loadPathGraph\n");
+		pModuleManager->ErrorPrintf("File does not exist @ loadPathGraph\n");
 		lua_pushboolean(luaVM, false);
 		return 1;
 	}
 
-	// Check if file exists
-	struct stat s;
-	if (stat(path.c_str(), &s) != 0)
+	// Check if path is valid
+	std::string path{ buf };
+	if (path.find("..") != std::string::npos)
 	{
-		pModuleManager->ErrorPrintf("File does not exist @ loadPathGraph\n");
+		pModuleManager->ErrorPrintf("Bad path @ loadPathGraph\n");
 		lua_pushboolean(luaVM, false);
 		return 1;
 	}
