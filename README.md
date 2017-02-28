@@ -28,6 +28,12 @@ bool findShortestPathBetween(float startX, float startY, float startZ, float end
 
 Returns _true_ if the route calculation has been scheduled successfully, _false_ otherwise.
 
+### Function: `isGraphLoaded`
+```cpp
+bool isGraphLoaded()
+```
+Returns _true_ if the graph is already loaded, _false_ otherwise.
+
 ## Contributors
 * Justus H.
 * Stefan K.

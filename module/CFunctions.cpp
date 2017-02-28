@@ -127,3 +127,9 @@ int CFunctions::FindShortestPathBetween(lua_State* luaVM)
 	lua_pushboolean(luaVM, true);
 	return 1;
 }
+
+int CFunctions::IsGraphLoaded(lua_State* luaVM)
+{
+	lua_pushboolean(luaVM, g_Module->GetGraph() != 0);
+	return 1;
+}

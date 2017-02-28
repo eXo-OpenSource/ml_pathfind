@@ -10,6 +10,6 @@ class CFunctions
 {
 public:
 	static int LoadPathGraph(lua_State* luaVM);
-
 	static int FindShortestPathBetween(lua_State* luaVM);
+	static int IsGraphLoaded(lua_State* luaVM);
 };

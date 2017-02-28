@@ -11,11 +11,11 @@ MTAEXPORT bool InitModule(ILuaModuleManager10* pManager, char* szModuleName, cha
 {
     pModuleManager = pManager;
 
-    // Set the module info
-    std::memcpy(szModuleName, "Pathfind Module", MAX_INFO_LENGTH);
-    std::memcpy(szAuthor, "Jusonex", MAX_INFO_LENGTH);
-    *fVersion = 1.0f;
-
+	// Set the module info
+	std::memcpy(szModuleName, "Pathfind Module", MAX_INFO_LENGTH);
+	std::memcpy(szAuthor, "Jusonex", MAX_INFO_LENGTH);
+	*fVersion = 1.0f;
+	
 	// Load module
 	g_Module = new Module(pManager);
 	g_Module->Start();
@@ -34,6 +34,7 @@ MTAEXPORT void RegisterFunctions(lua_State* luaVM)
 	// Register functions
 	pModuleManager->RegisterFunction(luaVM, "loadPathGraph", &CFunctions::LoadPathGraph);
 	pModuleManager->RegisterFunction(luaVM, "findShortestPathBetween", &CFunctions::FindShortestPathBetween);
+	pModuleManager->RegisterFunction(luaVM, "isGraphLoaded", &CFunctions::IsGraphLoaded);
 }
 
 MTAEXPORT bool DoPulse()
@@ -61,5 +62,5 @@ MTAEXPORT bool ResourceStopping(lua_State* luaVM)
 
 MTAEXPORT bool ResourceStopped(lua_State* luaVM)
 {
-    return true;
+	return true;
 }
