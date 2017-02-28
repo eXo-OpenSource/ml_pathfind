@@ -80,7 +80,7 @@ int CFunctions::FindShortestPathBetween(lua_State* luaVM)
 		// Run A*
 		return algorithm.CalculateShortestPath();
 
-	}, [luaVM, funcRef](const pathfind::AStarResult& result) {
+	}, [luaVM = lua_getmainstate(luaVM), funcRef](const pathfind::AStarResult& result) {
 
 		// Validate LuaVM (use ResourceStart/-Stop to manage valid lua states)
 		if (!g_Module->HasLuaVM(luaVM))
