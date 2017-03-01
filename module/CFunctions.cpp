@@ -36,7 +36,7 @@ int CFunctions::LoadPathGraph(lua_State* luaVM)
 		return 1;
 	}
 
-	// Check if the graph is not already loaded
+	// Check if the graph is already loaded
 	if (g_Module->GetGraph() != 0) {
 		pModuleManager->ErrorPrintf("Bad argument @ loadPathGraph, graph is already loaded\n");
 		lua_pushboolean(luaVM, false);
