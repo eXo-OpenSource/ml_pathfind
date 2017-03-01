@@ -33,6 +33,7 @@ MTAEXPORT void RegisterFunctions(lua_State* luaVM)
 
 	// Register functions
 	pModuleManager->RegisterFunction(luaVM, "loadPathGraph", &CFunctions::LoadPathGraph);
+	pModuleManager->RegisterFunction(luaVM, "unloadPathGraph", &CFunctions::UnloadPathGraph);
 	pModuleManager->RegisterFunction(luaVM, "findShortestPathBetween", &CFunctions::FindShortestPathBetween);
 	pModuleManager->RegisterFunction(luaVM, "isGraphLoaded", &CFunctions::IsGraphLoaded);
 }
@@ -41,7 +42,7 @@ MTAEXPORT bool DoPulse()
 {
 	g_Module->Process();
 
-    return true;
+	return true;
 }
 
 MTAEXPORT bool ShutdownModule()
@@ -57,7 +58,7 @@ MTAEXPORT bool ResourceStopping(lua_State* luaVM)
 	// Invalidate lua vm by removing it from the valid list
 	g_Module->RemoveLuaVM(luaVM);
 
-    return true;
+	return true;
 }
 
 MTAEXPORT bool ResourceStopped(lua_State* luaVM)

@@ -18,6 +18,7 @@ public:
 	void Process();
 
 	void LoadGraph(const std::string& path);
+	void UnloadGraph();
 
 	inline void AddLuaVM(lua_State* luaVM) { _luaStates.insert(luaVM); }
 	inline void RemoveLuaVM(lua_State* luaVM) { _luaStates.erase(luaVM); }
