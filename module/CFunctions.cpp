@@ -36,9 +36,29 @@ int CFunctions::LoadPathGraph(lua_State* luaVM)
 		return 1;
 	}
 
+	// Check if the graph is already loaded
+	if (g_Module->GetGraph() != 0) {
+		pModuleManager->ErrorPrintf("Bad argument @ loadPathGraph, graph is already loaded\n");
+		lua_pushboolean(luaVM, false);
+		return 1;
+	}
+
 	// Load graph
 	g_Module->LoadGraph(path);
 
+	lua_pushboolean(luaVM, true);
+	return 1;
+}
+
+int CFunctions::UnloadPathGraph(lua_State* luaVM)
+{
+	if (g_Module->GetGraph() == 0) {
+		pModuleManager->ErrorPrintf("Bad graph @ unloadPathGraph, cannot unload\n");
+		lua_pushboolean(luaVM, false);
+		return 1;
+	}
+
+	g_Module->UnloadGraph();
 	lua_pushboolean(luaVM, true);
 	return 1;
 }

@@ -18,6 +18,12 @@ bool loadPathGraph(string path)
 
 Returns _true_ if everything went fine, _false_ otherwise.
 
+### Function: `unloadPathGraph`
+```cpp
+bool unloadPathGraph()
+```
+Returns _true_ if the graph has been unloaded, _false_ otherwise.
+
 ### Function: `findShortestPathBetween`
 ```cpp
 bool findShortestPathBetween(float startX, float startY, float startZ, float endX, float endY, float endZ, function callback)

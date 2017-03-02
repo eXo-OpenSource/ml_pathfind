@@ -47,3 +47,15 @@ void Module::LoadGraph(const std::string& path)
 	// Start job manager again
 	_jobManager.Start();
 }
+
+void Module::UnloadGraph()
+{
+	// Make sure job manager is not running
+	_jobManager.Stop();
+
+	// Delete graph reference
+	_graph = nullptr;
+
+	// Start job manager again
+	_jobManager.Start();
+}
