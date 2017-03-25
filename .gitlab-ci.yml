@@ -1,6 +1,7 @@
 stages:
   - setup_env
   - build
+  - deploy
 
 setup_env_job:
   stage: setup_env
@@ -21,3 +22,9 @@ build_job:
     paths:
       - ml_gps.so
       - sa_nodes.json
+
+deploy_job:
+    stage: deploy
+    script:
+      - sudo mkdir -p /builddata
+      - sudo cp ml_gps.so /builddata/
