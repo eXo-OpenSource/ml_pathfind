@@ -582,7 +582,7 @@ typedef void (*luaL_addstring_t)(luaL_Buffer *B, const char *s);
 typedef void (*luaL_addvalue_t)(luaL_Buffer *B);
 typedef void (*luaL_pushresult_t)(luaL_Buffer *B);
 
-typedef void (*lua_getmainstate_t)(lua_State* L);
+typedef lua_State* (*lua_getmainstate_t)(lua_State* L);
 
 
 /** functions **/
@@ -1251,9 +1251,9 @@ void (luaL_pushresult) (luaL_Buffer *B)
   LCALL(luaL_pushresult, B);
 }
 
-void (lua_getmainstate) (lua_State* L)
+lua_State* (lua_getmainstate) (lua_State* L)
 {
-	LCALL(lua_getmainstate, L);
+	LRET(lua_getmainstate, L);
 }
 
 #ifdef __cplusplus
