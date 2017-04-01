@@ -4,11 +4,19 @@
 #include <cstring>
 #include "Module.h"
 
+#ifndef WIN32
+	#include "luaimports/luaimports.linux.h"
+#endif
+
 ILuaModuleManager10* pModuleManager = nullptr;
 
 // Initialisation function (module entrypoint)
 MTAEXPORT bool InitModule(ILuaModuleManager10* pManager, char* szModuleName, char* szAuthor, float* fVersion)
 {
+#ifndef WIN32
+	ImportLua();
+#endif
+
     pModuleManager = pManager;
 
 	// Set the module info
