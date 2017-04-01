@@ -201,6 +201,7 @@ static void* pluaL_addlstring = 0;
 static void* pluaL_addstring = 0;
 static void* pluaL_addvalue = 0;
 static void* pluaL_pushresult = 0;
+static void* plua_getmainstate = 0;
 
 
 #define SAFE_IMPORT(x) \
@@ -389,6 +390,9 @@ bool ImportLua()
   SAFE_IMPORT(luaL_addstring);
   SAFE_IMPORT(luaL_addvalue);
   SAFE_IMPORT(luaL_pushresult);
+
+  SAFE_IMPORT(lua_getmainstate);
+
     return true;
 }
 #undef SAFE_IMPORT
@@ -577,6 +581,8 @@ typedef void (*luaL_addlstring_t)(luaL_Buffer *B, const char *s, size_t l);
 typedef void (*luaL_addstring_t)(luaL_Buffer *B, const char *s);
 typedef void (*luaL_addvalue_t)(luaL_Buffer *B);
 typedef void (*luaL_pushresult_t)(luaL_Buffer *B);
+
+typedef void (*lua_getmainstate_t)(lua_State* L);
 
 
 /** functions **/
@@ -1243,6 +1249,11 @@ void (luaL_addvalue) (luaL_Buffer *B)
 void (luaL_pushresult) (luaL_Buffer *B)
 {
   LCALL(luaL_pushresult, B);
+}
+
+void (lua_getmainstate) (lua_State* L)
+{
+	LCALL(lua_getmainstate, L);
 }
 
 #ifdef __cplusplus
