@@ -20,14 +20,11 @@ project "module"
 		"**.h"
 	}
 	
-	filter {"system:linux", "platforms:x86" }
-			linkoptions { "-Wl,-rpath=mods/deathmatch" }
+	filter { "system:windows", "platforms:x86" }
+		links { "lua5.1.lib" }
+		
+	filter { "system:windows", "platforms:x64" }
+		links { "lua5.1_64.lib" }
 
-	filter {"system:linux", "platforms:x64" }
-		linkoptions { "-Wl,-rpath=x64" }
-
-	filter "system:linux"
-		linkoptions { "-l:lua5.1.so" }
-
-	filter "system:windows"
+	filter "system:not windows"
 		links { "lua5.1" }
