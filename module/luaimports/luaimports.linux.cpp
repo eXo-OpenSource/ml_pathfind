@@ -29,7 +29,6 @@
  */
 #include <dlfcn.h>
 #include <stdarg.h>
-#include "Common.h"
 #include "ILuaModuleManager.h"
 #include "lauxlib.h"
 #include "luaconf.h"
