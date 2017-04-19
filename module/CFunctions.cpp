@@ -153,3 +153,48 @@ int CFunctions::IsGraphLoaded(lua_State* luaVM)
 	lua_pushboolean(luaVM, g_Module->GetGraph() != 0);
 	return 1;
 }
+
+int CFunctions::FindNodeAt(lua_State* luaVM)
+{
+	if (lua_type(luaVM, 1) != LUA_TNUMBER || lua_type(luaVM, 2) != LUA_TNUMBER || lua_type(luaVM, 3) != LUA_TNUMBER)
+	{
+		pModuleManager->ErrorPrintf("Bad argument @ findNodeAt\n");
+		lua_pushboolean(luaVM, false);
+		return 1;
+	}
+
+	if (g_Module->GetGraph() == nullptr) {
+		pModuleManager->ErrorPrintf("Bad graph @ findNodeAt\n");
+		lua_pushboolean(luaVM, false);
+		return 1;
+	}
+
+	Vector3 position((float)lua_tonumber(luaVM, 1), (float)lua_tonumber(luaVM, 2), (float)lua_tonumber(luaVM, 3));
+	pathfind::GraphNode* node = g_Module->GetGraph()->FindClosestNodeTo(position);
+	if (node == nullptr) {
+		lua_pushboolean(luaVM, false);
+		return 1;
+	}
+
+	lua_newtable(luaVM);
+		lua_pushnumber(luaVM, 1); // index 1
+			lua_pushnumber(luaVM, node->id);
+		lua_settable(luaVM, -3);
+
+		lua_pushnumber(luaVM, 2); // index 2
+			lua_newtable(luaVM);
+				lua_pushnumber(luaVM, 1); // index 2.1
+				lua_pushnumber(luaVM, node->position.GetX());
+				lua_settable(luaVM, -3);
+
+				lua_pushnumber(luaVM, 2); // index 2.2
+				lua_pushnumber(luaVM, node->position.GetY());
+				lua_settable(luaVM, -3);
+
+				lua_pushnumber(luaVM, 3); // index 2.3
+				lua_pushnumber(luaVM, node->position.GetZ());
+				lua_settable(luaVM, -3);
+		lua_settable(luaVM, -3);
+
+	return 1;
+}
