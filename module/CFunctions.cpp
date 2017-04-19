@@ -36,39 +36,40 @@ int CFunctions::LoadPathGraph(lua_State* luaVM)
 		return 1;
 	}
 
-	// Check if the graph is already loaded
-	if (g_Module->GetGraph() != 0) {
-		pModuleManager->ErrorPrintf("Bad argument @ loadPathGraph, graph is already loaded\n");
-		lua_pushboolean(luaVM, false);
-		return 1;
-	}
-
 	// Load graph
-	g_Module->LoadGraph(path);
+	GraphId graphId = g_Module->LoadGraph(path);
+	lua_pushnumber(luaVM, graphId);
 
-	lua_pushboolean(luaVM, true);
 	return 1;
 }
 
 int CFunctions::UnloadPathGraph(lua_State* luaVM)
 {
-	if (g_Module->GetGraph() == 0) {
+	if (lua_type(luaVM, 1) != LUA_TNUMBER) {
+		pModuleManager->ErrorPrintf("Bad argument @ unloadPathGraph\n");
+		lua_pushboolean(luaVM, false);
+		return 1;
+	}
+
+	// Check if graph has been loaded
+	GraphId graphId = (GraphId) lua_tonumber(luaVM, 1);
+	if (g_Module->GetGraph(graphId) == nullptr) {
 		pModuleManager->ErrorPrintf("Bad graph @ unloadPathGraph, cannot unload\n");
 		lua_pushboolean(luaVM, false);
 		return 1;
 	}
 
-	g_Module->UnloadGraph();
+	g_Module->UnloadGraph(graphId);
 	lua_pushboolean(luaVM, true);
 	return 1;
 }
 
 int CFunctions::FindShortestPathBetween(lua_State* luaVM)
 {
-	// findShortestPathBetween(float startX, float startY, float startZ, float endX, float endY, float endZ, function callback)
-	if (lua_type(luaVM, 1) != LUA_TNUMBER || lua_type(luaVM, 2) != LUA_TNUMBER || lua_type(luaVM, 3) != LUA_TNUMBER ||
-		lua_type(luaVM, 4) != LUA_TNUMBER || lua_type(luaVM, 5) != LUA_TNUMBER || lua_type(luaVM, 6) != LUA_TNUMBER ||
-		lua_type(luaVM, 7) != LUA_TFUNCTION)
+	// findShortestPathBetween(uint graphId, float startX, float startY, float startZ, float endX, float endY, float endZ, function callback)
+	if (lua_type(luaVM, 1) != LUA_TNUMBER || lua_type(luaVM, 2) != LUA_TNUMBER || lua_type(luaVM, 3) != LUA_TNUMBER || lua_type(luaVM, 4) != LUA_TNUMBER ||
+		lua_type(luaVM, 5) != LUA_TNUMBER || lua_type(luaVM, 6) != LUA_TNUMBER || lua_type(luaVM, 7) != LUA_TNUMBER ||
+		lua_type(luaVM, 8) != LUA_TFUNCTION)
 	{
 		pModuleManager->ErrorPrintf("Bad argument @ findShortestPathBetween\n");
 		lua_pushboolean(luaVM, false);
@@ -76,7 +77,8 @@ int CFunctions::FindShortestPathBetween(lua_State* luaVM)
 	}
 
 	// Check if graph has been loaded
-	if (!g_Module->GetGraph())
+	GraphId graphId = (GraphId) lua_tonumber(luaVM, 1);
+	if (g_Module->GetGraph(graphId) == nullptr)
 	{
 		pModuleManager->ErrorPrintf("No graph loaded @ findShortestPathBetween\n");
 		lua_pushboolean(luaVM, false);
@@ -92,10 +94,10 @@ int CFunctions::FindShortestPathBetween(lua_State* luaVM)
 	lua_pushvalue(luaVM, -1);
 	int funcRef = luaL_ref(luaVM, LUA_REGISTRYINDEX);
 
-	g_Module->GetJobManager().PushTask([from, to]() {
+	g_Module->GetJobManager().PushTask([from, to, graphId]() {
 
 		// Prepare information we need to pass to A*
-		pathfind::AStar algorithm(g_Module->GetGraph(), from, to);
+		pathfind::AStar algorithm(g_Module->GetGraph(graphId), from, to);
 		
 		// Run A*
 		return algorithm.CalculateShortestPath();
@@ -150,38 +152,42 @@ int CFunctions::FindShortestPathBetween(lua_State* luaVM)
 
 int CFunctions::IsGraphLoaded(lua_State* luaVM)
 {
-	lua_pushboolean(luaVM, g_Module->GetGraph() != 0);
+	if (lua_type(luaVM, 1) != LUA_TNUMBER) {
+		pModuleManager->ErrorPrintf("Bad argument @ unloadPathGraph\n");
+		lua_pushboolean(luaVM, false);
+		return 1;
+	}
+
+	GraphId graphId = (GraphId) lua_tonumber(luaVM, 1);
+	lua_pushboolean(luaVM, g_Module->GetGraph(graphId) != nullptr);
 	return 1;
 }
 
 int CFunctions::FindNodeAt(lua_State* luaVM)
 {
-	if (lua_type(luaVM, 1) != LUA_TNUMBER || lua_type(luaVM, 2) != LUA_TNUMBER || lua_type(luaVM, 3) != LUA_TNUMBER)
+	if (lua_type(luaVM, 1) != LUA_TNUMBER || lua_type(luaVM, 2) != LUA_TNUMBER || lua_type(luaVM, 3) != LUA_TNUMBER || lua_type(luaVM, 4) != LUA_TNUMBER)
 	{
 		pModuleManager->ErrorPrintf("Bad argument @ findNodeAt\n");
 		lua_pushboolean(luaVM, false);
 		return 1;
 	}
 
-	if (g_Module->GetGraph() == nullptr) {
+	GraphId graphId = (GraphId) lua_tonumber(luaVM, 1);
+	if (g_Module->GetGraph(graphId) == nullptr) {
 		pModuleManager->ErrorPrintf("Bad graph @ findNodeAt\n");
 		lua_pushboolean(luaVM, false);
 		return 1;
 	}
 
-	Vector3 position((float)lua_tonumber(luaVM, 1), (float)lua_tonumber(luaVM, 2), (float)lua_tonumber(luaVM, 3));
-	pathfind::GraphNode* node = g_Module->GetGraph()->FindClosestNodeTo(position);
-	if (node == nullptr) {
+	Vector3 position((float)lua_tonumber(luaVM, 2), (float)lua_tonumber(luaVM, 3), (float)lua_tonumber(luaVM, 4));
+	pathfind::GraphNode* node = g_Module->GetGraph(graphId)->FindClosestNodeTo(position);
+	if (!node) {
 		lua_pushboolean(luaVM, false);
 		return 1;
 	}
 
 	lua_newtable(luaVM);
-		lua_pushnumber(luaVM, 1); // index 1
-			lua_pushnumber(luaVM, node->id);
-		lua_settable(luaVM, -3);
-
-		lua_pushnumber(luaVM, 2); // index 2
+		lua_pushnumber(luaVM, node->id); // index node->id
 			lua_newtable(luaVM);
 				lua_pushnumber(luaVM, 1); // index 2.1
 				lua_pushnumber(luaVM, node->position.GetX());

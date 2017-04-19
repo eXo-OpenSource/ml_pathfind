@@ -10,7 +10,7 @@ Module* g_Module = nullptr;
 
 constexpr std::size_t kNumWorkers = 2;
 
-Module::Module(ILuaModuleManager* manager) : _moduleManager(manager), _jobManager(kNumWorkers)
+Module::Module(ILuaModuleManager* manager) : _moduleManager(manager), _jobManager(kNumWorkers), _lastGraphId(0)
 {
 }
 
@@ -32,7 +32,7 @@ void Module::Process()
 	_jobManager.SpreadResults();
 }
 
-void Module::LoadGraph(const std::string& path)
+GraphId Module::LoadGraph(const std::string& path)
 {
 	// Make sure job manager is not running
 	_jobManager.Stop();
@@ -40,21 +40,25 @@ void Module::LoadGraph(const std::string& path)
 	// Load graph
 	auto startTime = std::chrono::system_clock::now();
 	pathfind::GraphReader graphReader(path);
-	_graph = graphReader.Read();
+
+	// Find free graphId and add it
+	AddGraph(++_lastGraphId, graphReader.Read());
 
 	_moduleManager->Printf("Loaded graph! (Took %dms)\n", std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - startTime).count());
 
 	// Start job manager again
 	_jobManager.Start();
+
+	return _lastGraphId;
 }
 
-void Module::UnloadGraph()
+void Module::UnloadGraph(GraphId graphId)
 {
 	// Make sure job manager is not running
 	_jobManager.Stop();
 
 	// Delete graph reference
-	_graph = nullptr;
+	RemoveGraph(graphId);
 
 	// Start job manager again
 	_jobManager.Start();

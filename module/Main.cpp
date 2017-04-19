@@ -21,7 +21,7 @@ MTAEXPORT bool InitModule(ILuaModuleManager10* pManager, char* szModuleName, cha
 
 	// Set the module info
 	std::memcpy(szModuleName, "Pathfind Module", MAX_INFO_LENGTH);
-	std::memcpy(szAuthor, "Jusonex", MAX_INFO_LENGTH);
+	std::memcpy(szAuthor, "Jusonex, StiviK", MAX_INFO_LENGTH);
 	*fVersion = 1.0f;
 	
 	// Load module
