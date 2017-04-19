@@ -44,7 +44,7 @@ GraphId Module::LoadGraph(const std::string& path)
 	// Find free graphId and add it
 	AddGraph(++_lastGraphId, graphReader.Read());
 
-	_moduleManager->Printf("Loaded graph! (Took %dms)\n", std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - startTime).count());
+	_moduleManager->Printf("Loaded graph! (Took %lldms)\n", std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - startTime).count());
 
 	// Start job manager again
 	_jobManager.Start();
