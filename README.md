@@ -12,21 +12,21 @@
 ## API
 ### Function: `loadPathGraph`
 ```cpp
-bool loadPathGraph(string path)
+int loadPathGraph(string path)
 ```
 * __path:__ The path to the graph definition file (relative to the resource directory)
 
-Returns _true_ if everything went fine, _false_ otherwise.
+Returns _graphId_ if everything went fine, _false_ otherwise.
 
 ### Function: `unloadPathGraph`
 ```cpp
-bool unloadPathGraph()
+bool unloadPathGraph(int graphId)
 ```
 Returns _true_ if the graph has been unloaded, _false_ otherwise.
 
 ### Function: `findShortestPathBetween`
 ```cpp
-bool findShortestPathBetween(float startX, float startY, float startZ, float endX, float endY, float endZ, function callback)
+bool findShortestPathBetween(int graphId, float startX, float startY, float startZ, float endX, float endY, float endZ, function callback)
 ```
 * __startX, startY, startZ:__ The start position
 * __endX, endY, endZ:__ The end position
@@ -36,9 +36,15 @@ Returns _true_ if the route calculation has been scheduled successfully, _false_
 
 ### Function: `isGraphLoaded`
 ```cpp
-bool isGraphLoaded()
+bool isGraphLoaded(int graphId)
 ```
 Returns _true_ if the graph is already loaded, _false_ otherwise.
+
+### Function: `findNodeAt`
+```cpp
+int, int, int, int findNodeAt(int graphId, float positionX, float positionY, float positionZ)
+```
+Returns _4 integers representing NodeId und his position_ if a node was found, _false_ otherwise.
 
 ## Contributors
 * Justus H.

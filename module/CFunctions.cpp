@@ -66,7 +66,7 @@ int CFunctions::UnloadPathGraph(lua_State* luaVM)
 
 int CFunctions::FindShortestPathBetween(lua_State* luaVM)
 {
-	// findShortestPathBetween(uint graphId, float startX, float startY, float startZ, float endX, float endY, float endZ, function callback)
+	// bool findShortestPathBetween(int graphId, float startX, float startY, float startZ, float endX, float endY, float endZ, function callback)
 	if (lua_type(luaVM, 1) != LUA_TNUMBER || lua_type(luaVM, 2) != LUA_TNUMBER || lua_type(luaVM, 3) != LUA_TNUMBER || lua_type(luaVM, 4) != LUA_TNUMBER ||
 		lua_type(luaVM, 5) != LUA_TNUMBER || lua_type(luaVM, 6) != LUA_TNUMBER || lua_type(luaVM, 7) != LUA_TNUMBER ||
 		lua_type(luaVM, 8) != LUA_TFUNCTION)
@@ -186,21 +186,10 @@ int CFunctions::FindNodeAt(lua_State* luaVM)
 		return 1;
 	}
 
-	lua_newtable(luaVM);
-		lua_pushnumber(luaVM, node->id); // index node->id
-			lua_newtable(luaVM);
-				lua_pushnumber(luaVM, 1); // index 2.1
-				lua_pushnumber(luaVM, node->position.GetX());
-				lua_settable(luaVM, -3);
+	lua_pushnumber(luaVM, node->id);
+	lua_pushnumber(luaVM, node->position.GetX());
+	lua_pushnumber(luaVM, node->position.GetY());
+	lua_pushnumber(luaVM, node->position.GetZ());
 
-				lua_pushnumber(luaVM, 2); // index 2.2
-				lua_pushnumber(luaVM, node->position.GetY());
-				lua_settable(luaVM, -3);
-
-				lua_pushnumber(luaVM, 3); // index 2.3
-				lua_pushnumber(luaVM, node->position.GetZ());
-				lua_settable(luaVM, -3);
-		lua_settable(luaVM, -3);
-
-	return 1;
+	return 4;
 }
