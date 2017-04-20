@@ -49,7 +49,20 @@ Returns _true_ if the graph is already loaded, _false_ otherwise.
 ```cpp
 int, int, int, int findNodeAt(int graphId, float positionX, float positionY, float positionZ)
 ```
+* __graphId:__ The id of the graph
+* __positionX, positionY, positionZ:__ The postion where to search for a node
+
 Returns _4 integers representing nodeId and his position_ if a node was found, _false_ otherwise.
+
+### Function: `getNodeNeighbors`
+```cpp
+table getNodeNeighbors(int graphId, int nodeId, int depth)
+```
+* __graphId:__ The id of the graph
+* __nodeId:__ The id of the start node
+* __depth:__ The depth of the node neighbors
+
+Returns a _table_ with all neighbors of the node, __false__ otherwise.
 
 ## Contributors
 * Justus H.
