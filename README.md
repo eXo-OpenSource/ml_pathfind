@@ -22,12 +22,15 @@ Returns _graphId_ if everything went fine, _false_ otherwise.
 ```cpp
 bool unloadPathGraph(int graphId)
 ```
+* __graphId:__ The id of the graph
+
 Returns _true_ if the graph has been unloaded, _false_ otherwise.
 
 ### Function: `findShortestPathBetween`
 ```cpp
 bool findShortestPathBetween(int graphId, float startX, float startY, float startZ, float endX, float endY, float endZ, function callback)
 ```
+* __graphId:__ The id of the graph
 * __startX, startY, startZ:__ The start position
 * __endX, endY, endZ:__ The end position
 * __callback:__ The callback function (parameters: `table nodes`)
@@ -38,13 +41,15 @@ Returns _true_ if the route calculation has been scheduled successfully, _false_
 ```cpp
 bool isGraphLoaded(int graphId)
 ```
+* __graphId:__ The id of the graph
+
 Returns _true_ if the graph is already loaded, _false_ otherwise.
 
 ### Function: `findNodeAt`
 ```cpp
 int, int, int, int findNodeAt(int graphId, float positionX, float positionY, float positionZ)
 ```
-Returns _4 integers representing NodeId und his position_ if a node was found, _false_ otherwise.
+Returns _4 integers representing nodeId and his position_ if a node was found, _false_ otherwise.
 
 ## Contributors
 * Justus H.
