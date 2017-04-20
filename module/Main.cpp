@@ -45,6 +45,7 @@ MTAEXPORT void RegisterFunctions(lua_State* luaVM)
 	pModuleManager->RegisterFunction(luaVM, "findShortestPathBetween", &CFunctions::FindShortestPathBetween);
 	pModuleManager->RegisterFunction(luaVM, "isGraphLoaded", &CFunctions::IsGraphLoaded);
 	pModuleManager->RegisterFunction(luaVM, "findNodeAt", &CFunctions::FindNodeAt);
+	pModuleManager->RegisterFunction(luaVM, "getNodeNeighbors", &CFunctions::GetNodeNeighbors);
 }
 
 MTAEXPORT bool DoPulse()

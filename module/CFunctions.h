@@ -14,4 +14,5 @@ public:
 	static int FindShortestPathBetween(lua_State* luaVM);
 	static int IsGraphLoaded(lua_State* luaVM);
 	static int FindNodeAt(lua_State* luaVM);
+	static int GetNodeNeighbors(lua_State* luaVM);
 };

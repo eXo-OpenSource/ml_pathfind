@@ -4,6 +4,7 @@
 
 #include <pathfind/Graph.h>
 #include "Module.h"
+#include "Utils.h"
 
 #ifndef _WIN32
 	#include <sys/stat.h>
@@ -52,7 +53,7 @@ int CFunctions::UnloadPathGraph(lua_State* luaVM)
 	}
 
 	// Check if graph has been loaded
-	GraphId graphId = (GraphId) lua_tonumber(luaVM, 1);
+	GraphId graphId = (GraphId)lua_tonumber(luaVM, 1);
 	if (g_Module->GetGraph(graphId) == nullptr) {
 		pModuleManager->ErrorPrintf("Bad graph @ unloadPathGraph, cannot unload\n");
 		lua_pushboolean(luaVM, false);
@@ -77,7 +78,7 @@ int CFunctions::FindShortestPathBetween(lua_State* luaVM)
 	}
 
 	// Check if graph has been loaded
-	GraphId graphId = (GraphId) lua_tonumber(luaVM, 1);
+	GraphId graphId = (GraphId)lua_tonumber(luaVM, 1);
 	if (g_Module->GetGraph(graphId) == nullptr)
 	{
 		pModuleManager->ErrorPrintf("No graph loaded @ findShortestPathBetween\n");
@@ -172,7 +173,7 @@ int CFunctions::FindNodeAt(lua_State* luaVM)
 		return 1;
 	}
 
-	GraphId graphId = (GraphId) lua_tonumber(luaVM, 1);
+	GraphId graphId = (GraphId)lua_tonumber(luaVM, 1);
 	if (g_Module->GetGraph(graphId) == nullptr) {
 		pModuleManager->ErrorPrintf("Bad graph @ findNodeAt\n");
 		lua_pushboolean(luaVM, false);
@@ -192,4 +193,34 @@ int CFunctions::FindNodeAt(lua_State* luaVM)
 	lua_pushnumber(luaVM, node->position.GetZ());
 
 	return 4;
+}
+
+int CFunctions::GetNodeNeighbors(lua_State* luaVM)
+{
+	if (lua_type(luaVM, 1) != LUA_TNUMBER || lua_type(luaVM, 2) != LUA_TNUMBER || lua_type(luaVM, 3) != LUA_TNUMBER)
+	{
+		pModuleManager->ErrorPrintf("Bad argument @ getNodeNeighbors\n");
+		lua_pushboolean(luaVM, false);
+		return 1;
+	}
+
+	GraphId graphId = (GraphId)lua_tonumber(luaVM, 1);
+	if (g_Module->GetGraph(graphId) == nullptr) {
+		pModuleManager->ErrorPrintf("Bad graph @ findNodeAt\n");
+		lua_pushboolean(luaVM, false);
+		return 1;
+	}
+
+	int depth = (int)lua_tonumber(luaVM, 3);
+	if (depth > Utils::MAX_NODE_DEPTH) {
+		pModuleManager->ErrorPrintf("Depth to high, would take to long @ findNodeAt\n");
+		lua_pushboolean(luaVM, false);
+		return 1;
+	}
+
+
+	lua_newtable(luaVM);
+	Utils::GetNodeNeighbors(luaVM, g_Module->GetGraph(graphId)->GetNode((int)lua_tonumber(luaVM, 2)), depth);
+
+	return 1;
 }

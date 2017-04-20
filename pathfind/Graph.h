@@ -23,6 +23,7 @@ public:
 	~Graph();
 
 	GraphNode* FindClosestNodeTo(const Vector3& position);
+	inline GraphNode* GetNode(int id) { return &_nodes[id]; };
 
 private:
 	std::vector<GraphNode> _nodes;
