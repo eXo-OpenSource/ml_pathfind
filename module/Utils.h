@@ -12,6 +12,6 @@ public:
 	static const int MAX_NODE_DEPTH = 15;
 #endif
 
-	static void GetNodeNeighbors(lua_State* luaVM, pathfind::GraphNode* node, int depth);
+	static bool GetNodeNeighbors(lua_State* luaVM, pathfind::GraphNode* node, int depth);
 
 };

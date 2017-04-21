@@ -211,6 +211,13 @@ int CFunctions::GetNodeNeighbors(lua_State* luaVM)
 		return 1;
 	}
 
+	int nodeId = (int)lua_tonumber(luaVM, 2);
+	if (nodeId < 0) {
+		pModuleManager->ErrorPrintf("Invalid NodeId @ findNodeAt\n");
+		lua_pushboolean(luaVM, false);
+		return 1;
+	}
+
 	int depth = (int)lua_tonumber(luaVM, 3);
 	if (depth > Utils::MAX_NODE_DEPTH) {
 		pModuleManager->ErrorPrintf("Depth to high, would take to long @ findNodeAt\n");
@@ -220,7 +227,11 @@ int CFunctions::GetNodeNeighbors(lua_State* luaVM)
 
 
 	lua_newtable(luaVM);
-	Utils::GetNodeNeighbors(luaVM, g_Module->GetGraph(graphId)->GetNode((int)lua_tonumber(luaVM, 2)), depth);
+	if (!Utils::GetNodeNeighbors(luaVM, g_Module->GetGraph(graphId)->GetNode(static_cast<unsigned int>(nodeId)), depth)) {
+		pModuleManager->ErrorPrintf("Invalid NodeId @ findNodeAt\n");
+		lua_pushboolean(luaVM, false);
+		return 1;
+	}
 
 	return 1;
 }
