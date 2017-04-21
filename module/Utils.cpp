@@ -1,13 +1,8 @@
 #include "Utils.h"
 #include "CFunctions.h"
 
-bool Utils::GetNodeNeighbors(lua_State* luaVM, pathfind::GraphNode* startNode, int depth)
+void Utils::GetNodeNeighbors(lua_State* luaVM, pathfind::GraphNode* startNode, int depth)
 {
-	if (startNode == nullptr) {
-		return false;
-	}
-
-
 	std::size_t index = 1;
 
 	for (const auto& pair : startNode->edges)
@@ -44,6 +39,4 @@ bool Utils::GetNodeNeighbors(lua_State* luaVM, pathfind::GraphNode* startNode, i
 
 		lua_settable(luaVM, -3);
 	}
-
-	return true;
 }
