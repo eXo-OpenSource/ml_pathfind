@@ -1,5 +1,4 @@
 #include "Utils.h"
-#include "CFunctions.h"
 
 void Utils::GetNodeNeighbors(lua_State* luaVM, pathfind::GraphNode* startNode, int depth)
 {

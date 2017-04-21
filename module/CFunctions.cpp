@@ -204,8 +204,8 @@ int CFunctions::GetNodeNeighbors(lua_State* luaVM)
 		return 1;
 	}
 
-	GraphId graphId = (GraphId)lua_tonumber(luaVM, 1);
-	if (g_Module->GetGraph(graphId) == nullptr) {
+	pathfind::Graph* graph = g_Module->GetGraph((GraphId)lua_tonumber(luaVM, 1));
+	if (graph == nullptr) {
 		pModuleManager->ErrorPrintf("Bad graph @ findNodeAt\n");
 		lua_pushboolean(luaVM, false);
 		return 1;
@@ -218,7 +218,7 @@ int CFunctions::GetNodeNeighbors(lua_State* luaVM)
 		return 1;
 	}
 
-	pathfind::GraphNode* node = g_Module->GetGraph(graphId)->GetNode(static_cast<unsigned int>(nodeId));
+	pathfind::GraphNode* node = graph->GetNode(static_cast<unsigned int>(nodeId));
 	if (node == nullptr) {
 		pModuleManager->ErrorPrintf("Invalid NodeId @ findNodeAt\n");
 		lua_pushboolean(luaVM, false);
