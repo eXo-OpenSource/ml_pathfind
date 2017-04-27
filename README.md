@@ -1,4 +1,5 @@
 # Pathfind Server Module for MTA:SA
+[![build status](https://git.heisi.at/eXo/mta-module-gps/badges/master/build.svg)](https://git.heisi.at/eXo/mta-module-gps/commits/master)
 ## Developing
 1. Download and install the EditorConfig plugin for Visual Studio: [https://github.com/editorconfig/editorconfig-visualstudio#readme](https://github.com/editorconfig/editorconfig-visualstudio#readme)
 2. Launch `premake.bat`
