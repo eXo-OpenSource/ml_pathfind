@@ -1,7 +1,7 @@
 project "module"
 	language "C++"
 	kind "SharedLib"
-	targetname "ml_gps"
+	targetname "ml_pathfind"
 	
 	includedirs { "include" }
 	libdirs { "lib" }

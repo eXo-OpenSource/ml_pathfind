@@ -1,0 +1,33 @@
+language: cpp
+
+matrix:
+  include:
+    - compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+      env: 
+        ENV_CXX=g++-5 
+        ENV_CC=gcc-5
+
+before_script:
+  - wget https://github.com/sbx320/premake5-travis/blob/master/premake5?raw=true -O ./premake5 &&
+    chmod +x ./premake5 &&
+    ./premake5 gmake && 
+    cd Build
+
+script:
+  - make -j 3 CXX=$ENV_CXX CC=$ENV_CC config=release_x64
+
+deploy:
+  skip_cleanup: true
+  provider: releases
+  api_key:
+    secure: HdNy5XN+W0ouqJSDTm2swWKFvrfd9i0s0JSI+dKEqF4zKYl1n28tgeVYK0Ch0bqMNfht75uB7QNKaHtvkYUmeiIusLUsm1dNVX/wIrFeT5vC+1IXzZhi7ymbat75e19ysDVvOrvbpKkWGljv1kiPINuSsWCqRF9VUl8l92hAYO49Kn1W6lhW3DoYhYAEL/DU1N8VnBNol1xO1V/cBMIjVeDNi8fgiYy+rx7fZcQ9cu59MaAZhT4CYbriRq/mzAeMxA5ndO44MaIfhfLg1Mkpok8uNDdXLiVB04MsvrrHUenH/USQdAfSSGo28eZYecfI2ipTt1n4jtt3Ca/Tdi6bvUEQytXiB2qEd285o1ROcioxqvwCQVuc+fj7iI7C5P2HM3SJw/P0WTrg/53aC0QdLaGqLeRNzYU3FZgSwADVXApna8ZbMsxIIZfWKH+TSKakS5M4rC5STZJq6CaCmQ6zyZZyNyAJr6ZZ3mLsDfXrwvMzkEGoWTxAJ+jOF89GBCIfsM7Yd10mTyYZOA0GHFdAXOA73ZMxhSGtefWrALXudu6YbDv4TX78/5eEv27tGrDG3t++BRHOM7j+MhzZHleWyMWdXBPENJCCOMYrqkuP1ldg/ZwDztu3uJQ/vz8rYtADVqM7zbsmoDlq2oH5TSiEx2iDJ63+lnpCBDR4WbQFwGU=
+  file: Bin/Release/ml_pathfind.so
+  on:
+    repo: eXo-MTA/ml_pathfind
+    tags: true

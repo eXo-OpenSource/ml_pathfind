@@ -1,0 +1,27 @@
+version: ci-{build}
+os: Visual Studio 2017
+
+configuration:
+  - Release
+
+before_build:
+  - premake5 vs2017
+
+clone_depth: 1
+
+build:
+  parallel: true
+  project: Build/PathFind.sln
+
+deploy:
+  release: ml_pathfind-v$(appveyor_build_version)
+  description: 'Pathfind module release'
+  provider: GitHub
+  auth_token:
+    secure: gUShV8myZZHnM6U/HmGkJmtKslpUMglLZoeMPTyMbwNBNskDk0wQ/1HRMoYakQ7A
+  artifact: Bin/Release/ml_pathfind.dll
+  draft: false
+  prerelease: false
+  on:
+    branch: master
+    appveyor_repo_tag: true

@@ -48,7 +48,7 @@ Returns _true_ if the graph is already loaded, _false_ otherwise.
 
 ### Function: `findNodeAt`
 ```cpp
-int, int, int, int findNodeAt(int graphId, float positionX, float positionY, float positionZ)
+int, float, float, float findNodeAt(int graphId, float positionX, float positionY, float positionZ)
 ```
 * __graphId:__ The id of the graph
 * __positionX, positionY, positionZ:__ The postion where to search for a node
