@@ -1,5 +1,6 @@
 # Pathfind Server Module for MTA:SA
-[![build status](https://git.heisi.at/eXo/mta-module-gps/badges/master/build.svg)](https://git.heisi.at/eXo/mta-module-gps/commits/master)
+[![Build Status](https://img.shields.io/travis/eXo-MTA/ml_pathfind/master.svg?label=Linux:master)](https://travis-ci.org/eXo-MTA/ml_pathfind)
+[![Build Status](https://img.shields.io/appveyor/ci/Jusonex/ml-pathfind/master.svg?label=Windows:master)](https://ci.appveyor.com/project/Jusonex/ml-pathfind)
 ## Developing
 1. Download and install the EditorConfig plugin for Visual Studio: [https://github.com/editorconfig/editorconfig-visualstudio#readme](https://github.com/editorconfig/editorconfig-visualstudio#readme)
 2. Launch `premake.bat`
