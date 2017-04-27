@@ -13,6 +13,10 @@ build:
   parallel: true
   project: Build/PathFind.sln
 
+artifacts:
+  - path: Bin/Release/ml_pathfind.dll
+    name: ml_pathfind.dll
+
 deploy:
   description: 'Pathfind module release'
   provider: GitHub
