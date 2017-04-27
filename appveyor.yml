@@ -14,7 +14,6 @@ build:
   project: Build/PathFind.sln
 
 deploy:
-  release: ml_pathfind-v$(appveyor_build_version)
   description: 'Pathfind module release'
   provider: GitHub
   auth_token:
@@ -23,5 +22,4 @@ deploy:
   draft: false
   prerelease: false
   on:
-    branch: master
     appveyor_repo_tag: true
