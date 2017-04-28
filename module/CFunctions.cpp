@@ -191,7 +191,7 @@ int CFunctions::FindNodeAt(lua_State* luaVM)
 
 	float fromX = (float)lua_tonumber(luaVM, 2), fromY = (float)lua_tonumber(luaVM, 3), fromZ = (float)lua_tonumber(luaVM, 4);
 	if (isinf(fromX) || isinf(fromY) || isinf(fromZ)) {
-		pModuleManager->ErrorPrintf("Bad argument @ findShortestPathBetween\n");
+		pModuleManager->ErrorPrintf("Bad argument @ findNodeAt\n");
 		lua_pushboolean(luaVM, false);
 		return 1;
 	}
