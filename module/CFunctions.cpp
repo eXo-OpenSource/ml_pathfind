@@ -86,9 +86,18 @@ int CFunctions::FindShortestPathBetween(lua_State* luaVM)
 		return 1;
 	}
 
+	// Check if the positions are valid
+	float fromX = (float)lua_tonumber(luaVM, 2), fromY = (float)lua_tonumber(luaVM, 3), fromZ = (float)lua_tonumber(luaVM, 4);
+	float toX = (float)lua_tonumber(luaVM, 5), toY = (float)lua_tonumber(luaVM, 6), toZ = (float)lua_tonumber(luaVM, 7);
+	if (isinf(fromX) || isinf(fromY) || isinf(fromZ) || isinf(toX) || isinf(toY) || isinf(toZ)) {
+		pModuleManager->ErrorPrintf("Bad argument @ findShortestPathBetween\n");
+		lua_pushboolean(luaVM, false);
+		return 1;
+	}
+
 	// Make vectors from Lua primitives
-	Vector3 from((float)lua_tonumber(luaVM, 1), (float)lua_tonumber(luaVM, 2), (float)lua_tonumber(luaVM, 3));
-	Vector3 to((float)lua_tonumber(luaVM, 4), (float)lua_tonumber(luaVM, 5), (float)lua_tonumber(luaVM, 6));
+	Vector3 from(fromX, fromY, fromZ);
+	Vector3 to(toX, toY, toZ);
 
 	// Save reference of the Lua callback function
 	// See: http://lua-users.org/lists/lua-l/2008-12/msg00193.html
@@ -180,7 +189,14 @@ int CFunctions::FindNodeAt(lua_State* luaVM)
 		return 1;
 	}
 
-	Vector3 position((float)lua_tonumber(luaVM, 2), (float)lua_tonumber(luaVM, 3), (float)lua_tonumber(luaVM, 4));
+	float fromX = (float)lua_tonumber(luaVM, 2), fromY = (float)lua_tonumber(luaVM, 3), fromZ = (float)lua_tonumber(luaVM, 4);
+	if (isinf(fromX) || isinf(fromY) || isinf(fromZ)) {
+		pModuleManager->ErrorPrintf("Bad argument @ findShortestPathBetween\n");
+		lua_pushboolean(luaVM, false);
+		return 1;
+	}
+
+	Vector3 position(fromX, fromY, fromZ);
 	pathfind::GraphNode* node = g_Module->GetGraph(graphId)->FindClosestNodeTo(position);
 	if (!node) {
 		lua_pushboolean(luaVM, false);
