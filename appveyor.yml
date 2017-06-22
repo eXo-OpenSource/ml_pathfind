@@ -9,20 +9,33 @@ before_build:
 
 clone_depth: 1
 
+platform:
+  - Win32
+  - x64
+
 build:
   parallel: true
   project: Build/PathFind.sln
 
+after_build:
+  - ps: |
+      if($env:PLATFORM -eq 'x64') {
+        $env:NAME = 'ml_pathfind_x64.dll'
+      } else {
+        $env:NAME = 'ml_pathfind_x86.dll'
+      }
+      mv Bin/Release/ml_pathfind.dll Bin/Release/$env:NAME
+  
 artifacts:
-  - path: Bin/Release/ml_pathfind.dll
-    name: ml_pathfind.dll
+  - path: Bin/Release/$(NAME)
+    name: "ml_pathfind"
 
 deploy:
   description: 'Pathfind module release'
   provider: GitHub
   auth_token:
     secure: gUShV8myZZHnM6U/HmGkJmtKslpUMglLZoeMPTyMbwNBNskDk0wQ/1HRMoYakQ7A
-  artifact: Bin/Release/ml_pathfind.dll
+  artifact: "ml_pathfind"
   draft: false
   prerelease: false
   on:
