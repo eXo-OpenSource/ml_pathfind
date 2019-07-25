@@ -1,5 +1,6 @@
 project "pathfind"
 	language "C++"
+	cppdialect "C++14"
 	kind "StaticLib"
 
 	vpaths {

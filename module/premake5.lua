@@ -1,5 +1,6 @@
 project "module"
 	language "C++"
+	cppdialect "C++14"
 	kind "SharedLib"
 	targetname "ml_pathfind"
 	

@@ -1,0 +1,38 @@
+stages:
+- stage: Build
+  jobs:
+  - job: Linux
+    pool:
+      vmImage: 'ubuntu-16.04'
+    steps:
+    - script: chmod +x utils/premake5 && utils/premake5 gmake
+      displayName: 'Generate Makefile'
+    - script: cd Build && make -j 3 CXX=g++-7 CC=gcc-7 config=release_x64
+      displayName: 'Build project'
+    - script: mv $(Build.SourcesDirectory)/Bin/Release/libml_pathfind.so $(Build.SourcesDirectory)/Bin/Release/ml_pathfind.so
+    - publish: '$(Build.SourcesDirectory)/Bin/Release/ml_pathfind.so'
+      artifact: 'ml_pathfind_linux'
+  - job: Windows
+    pool:
+      vmImage: 'windows-2019'
+    strategy:
+      maxParallel: 2
+      matrix:
+        Win32:
+          platform: 'win32'
+        x64:
+          platform: 'x64'
+    variables:
+      solution: 'Build/pathfind.sln'
+      buildConfiguration: 'Release'
+    steps:
+    - script: utils\premake5 vs2019
+      displayName: 'Create Visual Studio 2019 Solution'
+    - task: VSBuild@1
+      inputs:
+        solution: '$(solution)'
+        configuration: '$(buildConfiguration)'
+        platform: '$(platform)'
+    - script: move /Y $(Build.SourcesDirectory)\Bin\Release\ml_pathfind.dll $(Build.SourcesDirectory)\Bin\Release\ml_pathfind_$(platform).dll
+    - publish: '$(Build.SourcesDirectory)\Bin\Release\ml_pathfind_$(platform).dll'
+      artifact: 'ml_pathfind_$(platform)'

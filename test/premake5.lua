@@ -1,5 +1,6 @@
 project "test"
 	language "C++"
+	cppdialect "C++14"
 	kind "ConsoleApp"
 
 	links { "pathfind" }
